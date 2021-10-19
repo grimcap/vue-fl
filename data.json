@@ -1,0 +1,64 @@
+{
+	"projects": [
+		{
+			"id": 299165,
+			"name": "Looking for Full stack developer",
+			"skills": [
+				{
+				"id": 56,
+				"name": "1C"
+				},
+				{
+					"id": 56,
+					"name": "PHP"
+				}
+			],
+			"budget": {
+				"amount": 2300,
+				"currency": "UAH"
+			},
+			"description_html": "<p>Backend must be PHP like Yii or Laravel.</p>",
+			"published_at": "2018-03-25T19:51:53+02:00"
+		},
+		{
+			"id": 543544,
+			"name": "Looking for JS developer",
+			"skills": [
+				{
+					"id": 666,
+					"name": "JavaScript"
+				},
+				{
+					"id": 444,
+					"name": "DevOps"
+				},
+				{
+					"id": 34,
+					"name": "FTP"
+				}
+			],
+			"budget": {
+				"amount": 80000,
+				"currency": "RUB"
+			},
+			"description_html": "<p>Sad but true</p>",
+			"published_at": "2019-03-23T19:51:53+02:00"
+		},
+		{
+			"id": 2994356,
+			"name": "Looking for C++ developer",
+			"skills": [
+				{
+					"id": 42,
+					"name": "C++"
+				}
+			],
+			"budget": {
+				"amount": 55555,
+				"currency": "UAH"
+			},
+			"description_html": "<p>C++ like Yii or Laravel.</p>",
+			"published_at": "2023-03-28T19:51:53+02:00"
+		}
+	]
+}
