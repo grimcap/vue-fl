@@ -10,9 +10,6 @@
 		</div>
 
 		<ui-table :data="itms" :thead="thead" :tbody="tbody" @click="tableClick($event.target)" class="projTable">
-			<template #name="{data}" :class="aaa">
-				{{data.attributes.name}}
-			</template>
 			<template #skills="{data}">
 				<span v-for="skill in data.attributes.skills" :key="skill.id" class="proj_cat">{{skill.name}}</span>
 			</template>
@@ -30,11 +27,14 @@
 
 
 	<ui-dialog v-model="popUp_opened" class="popUp">
-		<ui-dialog-title>{{this.itms[curItm] && this.itms[curItm].attributes.name}}</ui-dialog-title>
-		<!-- <ui-dialog-content>
-			<small class="published">{{formatDate(this.curItm.attributes.published_at)}}</small>
-			<div v-html="this.curItm.attributes.description_html" class="popUp_content"></div>
-		</ui-dialog-content> -->
+		<ui-dialog-title>{{this.curItm.attributes && this.curItm.attributes.name}}</ui-dialog-title>
+		<ui-dialog-content>
+			<small class="published">{{formatDate(this.curItm.attributes && this.curItm.attributes.published_at)}}</small>
+			<p v-html="this.curItm.attributes && this.curItm.attributes.description_html" class="popUp_content"></p>
+			<a class="link" :href="this.curItm.links && this.curItm.links.self.web" target="_blank">Смотреть на Freelancehunt</a>
+
+			<!-- <a class="link" href="#">Сылка</a> -->
+		</ui-dialog-content>
 		<ui-dialog-actions>
 			<ui-button @click="popUp_opened = false">OK</ui-button>
 		</ui-dialog-actions>
@@ -53,19 +53,23 @@ export default {
 		data_itms: [],
 		itms: [],
 		errors: [],
-		curItm: 0,
+		curItm: [],
 
 		popUp_opened: false,
 
 		thead: [
 			'id',
-			'Название',
+			{
+				value: 'Название',
+				class: 'col_name'
+			},
 			'Категории',
-			// 'Бюджет',
 			{
 				value: 'Бюджет',
-				// sort: 'none',
-			}
+				// sort: 'asc',
+				// columnId: 'budget',
+			},
+			// 'Бюджет',
 		],
 		tbody: [
 			{
@@ -73,16 +77,23 @@ export default {
 				class: 'row_id'
 			},
 			{
-				// slot: 'name',
 				field: 'name',
-				class: (itms) => {return 'id-'+ itms.id},
+				class: (itms) => {return 'col_name id-'+ itms.id},
 				fn: (itms) => {
 					return itms.attributes.name
 				}
 			},
 			{
 				slot: 'skills',
+				class: 'col_skills',
 			},
+			// {
+			// 	field: 'budget',
+			// 	fn: (itm) => {
+			// 		let cost = itm.attributes.budget && itm.attributes.budget.amount;
+			// 		return cost;
+			// 	}
+			// },
 			{
 				field: 'budget',
 				fn: (itm) => {
@@ -101,7 +112,7 @@ export default {
 			fetch(this.data_url, {
 				headers: {
 					// 'Content-type': 'application/json',
-					'Authorization': 'Bearer fa362b273b45ef958a3fb34aad0b1eb25abd6e1e'
+					'Authorization': 'Bearer '
 				},
 			}).then(res=>res.json()).then((response) => {
 				console.log(response)
@@ -114,8 +125,7 @@ export default {
 		},
 
 		tableClick(row) {
-			if(!row.hasAttribute('role')){
-				console.log(row.closest('tr').classList)
+			if(row.closest('tr').className != 'mdc-data-table__header-row'){
 				this.curItm_id = row.closest('tr').querySelector('.row_id').innerText*1;
 				this.curItm = (this.itms.filter((el) => el.id === this.curItm_id))[0];
 				this.popUp_opened = true;
@@ -138,6 +148,7 @@ export default {
 		flex-direction: column;
 		align-items: center;
 		margin-top: 10%;
+		max-width: 80%;
 		font-size: 14px;
 	}
 
@@ -162,11 +173,17 @@ export default {
 	}
 
 	.projTable {
+		max-width: 100%;
 		cursor: pointer;
+
+		.mdc-data-table__header-cell:first-child, .mdc-data-table__cell:first-child {display: none}
 
 		.mdc-data-table__header-cell {
 			background-color: #6200ee11;
 		}
+
+		.col_name {max-width: 300px}
+		.col_skills {max-width: 300px}
 
 		/* .row_id {display: none} */
 
@@ -179,9 +196,41 @@ export default {
 		}
 	}
 
-	.popUp .published {
-		display: block;
-		text-align: right;
+	.popUp {
+		padding: 10px 15px;
+		text-align: left;
+
+		h2 {line-height: 1.3}
+
+		.mdc-dialog__content {
+			max-height: 50vh;
+			word-wrap: break-word;
+		}
+
+		.published {
+			display: block;
+			margin-left: 10px;
+			margin-bottom: 10px;
+		}
+
+		p {margin: 0 0 5px}
+		p br {display: none}
+
+		.link {
+			position: absolute;
+			bottom: 15px;
+			left: 25px;
+			z-index: 10;
+			border: 0;
+			outline: 0;
+			text-decoration: none;
+			border-bottom: 1px solid #0000;
+
+			&:hover {
+				border-bottom: 1px solid #6200ee;
+				transition: .3s;
+			}
+		}
 	}
 	
 </style>
